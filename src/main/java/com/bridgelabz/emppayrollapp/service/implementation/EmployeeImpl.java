@@ -1,53 +1,63 @@
 package com.bridgelabz.emppayrollapp.service.implementation;
 
 import java.util.List;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.emppayrollapp.dto.EmployeeDto;
 import com.bridgelabz.emppayrollapp.model.Employee;
 import com.bridgelabz.emppayrollapp.repo.EmpRepository;
 import com.bridgelabz.emppayrollapp.service.IEmployee;
+import com.bridgelabz.emppayrollapp.util.Response;
 
 @Service
 public class EmployeeImpl implements IEmployee {
 	
 	@Autowired
-	private EmpRepository empRepo;
+	private EmpRepository empRepository;
 	
-	@Override
-	public void addEmployee(Employee employee) {
-		empRepo.save(employee);
-		System.out.println("Added to repo.");
-	}
+//	@Autowired
+//	private ModelMapper mappy;
+	
+//	@Override
+//	public Response addEmployee(EmployeeDto empDto) {
+//		Employee employee= mappy.map(empDto, Employee.class);
+//		empRepository.save(employee);
+//		System.out.println("Added to repo.");
+//		return new Response(200, "Added sucessfully.");
+//	}
 
 	@Override
-	public void addEmployee(String name, Long salary) {
-		Employee employee = new Employee();
-		employee.setSalary(salary);
-		employee.setname(name);
-		this.addEmployee(employee);
-
+	public Response addEmployee(Employee emp) {
+		empRepository.save(emp);
+		System.out.println("Added to repository.");
+		return new Response(200, "Added sucessfully.");
 	}
 
 	@Override
 	public List<Employee> getEmployee() {
-		return empRepo.findAll();
+		System.out.println(empRepository.findAll());
+		return empRepository.findAll();
 	}
 
 	@Override
 	public Employee getEmployeeByID(Long id) {
-		return empRepo.findById(id).get();
+		return empRepository.findById(id).get();
 	}
 
 	@Override
 	public void deleteEmployee(Long id) {
-		empRepo.deleteById(id);
+		System.out.println("Del from repository.");
+		empRepository.deleteById(id);
 	}
 
 	@Override
-	public void update(Long id, Long salary) {
-		Employee employee = empRepo.findById(id).get();
-		employee.setSalary(salary);
-		this.addEmployee(employee);
+	public void update(Employee newEmp,Long id) {
+		this.deleteEmployee(id);
+		newEmp.setId(id);
+		empRepository.save(newEmp);
+		System.out.println("Updated to repository.");
 	}
 }

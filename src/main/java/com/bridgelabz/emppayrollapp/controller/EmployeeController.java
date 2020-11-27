@@ -1,12 +1,13 @@
 package com.bridgelabz.emppayrollapp.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.bridgelabz.emppayrollapp.model.Employee;
 import com.bridgelabz.emppayrollapp.service.IEmployee;
+import com.bridgelabz.emppayrollapp.util.Response;
 
 @RestController
 @RequestMapping("/employee")
@@ -15,14 +16,16 @@ public class EmployeeController {
 	@Autowired
 	private IEmployee empService;
 	
-	@PostMapping("/post/{name}/{salary}")
-	public void addEmployee(@PathVariable(value="name") String name,@PathVariable(value="salary") Long salary){
-	   empService.addEmployee(name,salary);	
+	@PostMapping(value="/post")
+	public ResponseEntity<Response> addEmployee(@RequestBody Employee emp) {
+	//(@PathVariable(value="name") String name,@PathVariable(value="salary") Long salary){
+		Response response=empService.addEmployee(emp);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/getEmp")
-	public List<Employee> getEmployee(){
-		 return empService.getEmployee();
+	public void getEmployee(){
+		empService.getEmployee();
 	}
 	
 	@GetMapping("/getEmp/{id}")
@@ -30,13 +33,13 @@ public class EmployeeController {
 		return empService.getEmployeeByID(id);
 	}
 	
-	@PutMapping("/update/{id}/{salary}")
-	public void update(@PathVariable("id") Long id,@PathVariable(value="salary") Long salary) {
-		empService.update(id,salary);
+	@PutMapping("/update/{id}")
+	public void update(@RequestBody Employee emp,@PathVariable("id") long id) {
+		empService.update(emp,id);
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public void delete(@PathVariable("id") long empId) {
-		empService.deleteEmployee(empId);
+	public void delete(@PathVariable("id") long id) {
+		empService.deleteEmployee(id);
 	}
 }
