@@ -1,5 +1,6 @@
 package com.bridgelabz.emppayrollapp.model;
 
+import java.util.Date;
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class Employee {
 	
 	private String name;
 	private Long salary;
+	private Date startDate=new Date();
 
 	
 	public Long getId() {
@@ -32,8 +34,20 @@ public class Employee {
 	public void setSalary(Long salary) {
 		this.salary = salary;
 	}
+	/**
+	 * @return the startDate
+	 */
+	public Date getStartDate() {
+		return startDate;
+	}
+	/**
+	 * @param startDate the startDate to set
+	 */
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
 	@Override
 	public String toString() {
-		return "Employee [id=" + id + ", name=" + name + ", salary=" + salary + "]";
+		return "Employee [id=" + id + ", name=" + name + ", salary=" + salary + ", startDate=" + startDate + "]";
 	}
 }
